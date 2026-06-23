@@ -1,0 +1,9 @@
+myvenv/
+__pycache__/
+*.pyc
+
+~$*.xlsx
+~$*.xls
+
+.vscode/
+Thumbs.db

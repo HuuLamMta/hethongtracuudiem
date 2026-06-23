@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tra cứu điểm sinh viên</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+    background:#f5f7fb;
+}
+
+.header{
+    background:linear-gradient(135deg,#0d6efd,#4b8cff);
+    color:white;
+    padding:30px;
+    border-radius:20px;
+    margin-bottom:20px;
+}
+
+.student-card{
+    border:none;
+    border-radius:15px;
+    box-shadow:0 3px 12px rgba(0,0,0,.1);
+}
+
+.gpa{
+    font-size:32px;
+    font-weight:bold;
+    color:#198754;
+}
+
+.score-good{
+    color:#198754;
+    font-weight:bold;
+}
+
+.score-medium{
+    color:#fd7e14;
+    font-weight:bold;
+}
+
+.score-low{
+    color:#dc3545;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <div class="header text-center">
+
+        <h1>🎓 Tra cứu điểm sinh viên</h1>
+
+        <p class="mb-0">
+            Tìm kiếm bằng MSSV hoặc Họ tên
+        </p>
+
+    </div>
+
+    <div class="card student-card">
+
+        <div class="card-body">
+
+            <form method="post">
+
+                <div class="row">
+
+                    <div class="col-md-10">
+
+                        <input
+                            type="text"
+                            class="form-control form-control-lg"
+                            name="keyword"
+                            placeholder="Nhập MSSV hoặc Họ tên"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <button
+                            class="btn btn-primary btn-lg w-100"
+                            type="submit"
+                        >
+                            Tra cứu
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    {% if message %}
+
+    <div class="alert alert-danger mt-3">
+        {{ message }}
+    </div>
+
+    {% endif %}
+
+    {% if student %}
+
+    <div class="card student-card mt-4">
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-8">
+
+                    <h3>{{ student["Họ tên"] }}</h3>
+
+                    <p>
+                        <strong>MSSV:</strong>
+                        {{ student["MSSV"] }}
+                    </p>
+
+                    <p>
+                        <strong>Lớp:</strong>
+                        {{ student["Lớp"] }}
+                    </p>
+
+                    <p>
+                        <strong>Ngành:</strong>
+                        {{ student["Ngành"] }}
+                    </p>
+
+                </div>
+
+                <div class="col-md-4 text-center">
+
+                    <div class="gpa">
+                        GPA {{ gpa }}
+                    </div>
+
+                    <small>
+                        Trung bình toàn khóa
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="accordion mt-4" id="semesterAccordion">
+
+        {% for hk, rows in semesters.items() %}
+
+        <div class="accordion-item">
+
+            <h2 class="accordion-header">
+
+                <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#hk{{ loop.index }}"
+                >
+
+                    {{ hk }}
+
+                </button>
+
+            </h2>
+
+            <div
+                id="hk{{ loop.index }}"
+                class="accordion-collapse collapse"
+                data-bs-parent="#semesterAccordion"
+            >
+
+                <div class="accordion-body">
+
+                    <table class="table table-striped">
+
+                        <thead class="table-primary">
+
+                            <tr>
+                                <th>Môn học</th>
+                                <th>Tín chỉ</th>
+                                <th>Điểm</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        {% for row in rows %}
+
+                        <tr>
+
+                            <td>{{ row["Môn học"] }}</td>
+
+                            <td>{{ row["Số TC"] }}</td>
+
+                            <td>
+
+                            {% if row["Điểm hệ 10"] >= 8 %}
+
+                                <span class="score-good">
+                                    {{ row["Điểm hệ 10"] }}
+                                </span>
+
+                            {% elif row["Điểm hệ 10"] >= 6.5 %}
+
+                                <span class="score-medium">
+                                    {{ row["Điểm hệ 10"] }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="score-low">
+                                    {{ row["Điểm hệ 10"] }}
+                                </span>
+
+                            {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
