@@ -77,7 +77,7 @@ for file in Path(DATA_FOLDER).glob("*.xlsx"):
             semesters.add(current_semester)
 
         # Môn học
-        subject = ""
+        subject = ""tia
 
         if len(row) > 1 and pd.notna(row[1]):
             subject = str(row[1]).strip()
